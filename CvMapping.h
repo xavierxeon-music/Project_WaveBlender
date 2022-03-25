@@ -3,6 +3,8 @@
 
 #include <Remember.h>
 
+#include <Tools/BoolField.h>
+
 class CvMapping : public Remember::Container
 {
 public:
@@ -24,18 +26,18 @@ public:
    CvMapping();
 
 public:
-   void apply(const float knobs[4]);
+   void apply(const float controlVoltages[4]);
    Sum sum(const Type& type);
 
    void set(const Type& type, const uint8_t& channel, bool on);
    bool get(const Type& type, const uint8_t& channel) const;
 
 private: // things to remember
-   using BitField_ = Remember::Value<uint16_t>;
+   using BitFieldStore_ = Remember::Value<uint16_t>;
 
 private:
    Sum sums[4];
-   BitField_ bitField;
+   BitFieldStore_ bitFieldStore;
 };
 
 #endif //  CvMappingH

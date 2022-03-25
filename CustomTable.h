@@ -24,7 +24,7 @@ public:
 
    // input / output
    CvMapping* getCvMapping();
-   float setCvAndGetFrequency(const float knobs[4]);
+   float setCvAndGetFrequency(const float controlVoltages[4]);
    float valueByAngle(const float& angle) const override;
 
    // user interaction - waveform

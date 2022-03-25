@@ -7,11 +7,11 @@
 CvMapping::CvMapping()
    : Remember::Container()
    , sums()
-   , bitField(this, 0)
+   , bitFieldStore(this, 0)
 {
 }
 
-void CvMapping::apply(const float knobs[4])
+void CvMapping::apply(const float controlVoltages[4])
 {
    for (uint8_t type = 0; type < 4; type++)
    {
@@ -24,11 +24,11 @@ void CvMapping::apply(const float knobs[4])
          if (!get(static_cast<Type>(type), channel))
             continue;
 
-         sum.value += knobs[channel];
+         sum.value += controlVoltages[channel];
          sum.active = true;
       }
 
-      sum.value = Range::clamp<float>(sum.value, 0.0, 1.0);
+      sum.value = Range::clamp<float>(sum.value, 0.0, 5.0);
    }
 }
 
@@ -39,19 +39,18 @@ CvMapping::Sum CvMapping::sum(const Type& type)
 
 void CvMapping::set(const Type& type, const uint8_t& channel, bool on)
 {
-   const uint16_t mask = 1 << ((4 * type) + channel);
-   if (on)
-      bitField = (mask | bitField);
-   else
-      bitField = (~mask & bitField);
+   BoolField16 bitField(bitFieldStore);
+   const uint8_t index = (4 * type) + channel;
 
+   bitField.set(index, on);
+   bitFieldStore = bitField;
    Remember::Root::setUnsynced();
 }
 
 bool CvMapping::get(const Type& type, const uint8_t& channel) const
 {
-   const uint16_t mask = 1 << ((4 * type) + channel);
-   bool test = ((mask & bitField) == mask);
+   BoolField16 bitField(bitFieldStore);
+   const uint8_t index = (4 * type) + channel;
 
-   return test;
+   return bitField.get(index);
 }

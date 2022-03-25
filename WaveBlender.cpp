@@ -41,7 +41,7 @@ void WaveBlender::audioLoop(AudioHandle::InputBuffer in, AudioHandle::OutputBuff
 
    for (uint8_t channel = 0; channel < 4; channel++)
    {
-      const float frequency = tables[channel].setCvAndGetFrequency(input.knobs);
+      const float frequency = tables[channel].setCvAndGetFrequency(input.controlVoltages);
       oscilators[channel].setFrequency(frequency);
 
       for (size_t chunk = 0; chunk < size; chunk++)

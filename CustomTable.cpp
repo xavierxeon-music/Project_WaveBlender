@@ -36,11 +36,11 @@ CvMapping* CustomTable::getCvMapping()
    return cvMapping;
 }
 
-float CustomTable::setCvAndGetFrequency(const float knobs[4])
+float CustomTable::setCvAndGetFrequency(const float controlVoltages[4])
 {
-   cvMapping->apply(knobs);
+   cvMapping->apply(controlVoltages);
 
-   const float voltage = (cvMapping->sum(CvMapping::Pitch).value * 5.0) + offsetVoltage;
+   const float voltage = (cvMapping->sum(CvMapping::Pitch).value) + offsetVoltage;
    const float frequency = TableOscilator::frequencyFromCV(voltage);
 
    const CvMapping::Sum seedSum = cvMapping->sum(CvMapping::Seed);

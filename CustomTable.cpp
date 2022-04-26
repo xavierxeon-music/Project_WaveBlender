@@ -8,7 +8,7 @@
 const uint8_t CustomTable::maxBlend = 63;
 
 CustomTable::CustomTable()
-   : WaveTable::Table(2 * 2.0f * Maths::pi)
+   : WaveTable::Morpher()
    , Remember::Container()
    , cvMapping(this)
    , waveform(this, Standard::Waveform::Sine)
@@ -16,18 +16,20 @@ CustomTable::CustomTable()
    , seed(this, 0)
    , seedInternal{0}
    , blend(this, 0)
-   , blendInternal{0.0}
    , standardTable()
    , randomWalkTables()
 {
    seedInternal = seed;
-   blendInternal = static_cast<float>(blend) / static_cast<float>(maxBlend);
+   setMix(static_cast<float>(blend) / static_cast<float>(maxBlend));
+
+   addTable(&standardTable);
+   addTable(&randomWalkTables);
 }
 
 void CustomTable::init()
 {
    seedInternal = seed;
-   blendInternal = static_cast<float>(blend) / static_cast<float>(maxBlend);
+   setMix(static_cast<float>(blend) / static_cast<float>(maxBlend));
    standardTable.setWaveform(waveform);
    randomWalkTables.setSeed(seedInternal);
 }
@@ -54,21 +56,13 @@ float CustomTable::setCvAndGetFrequency(const float controlVoltages[4])
 
    const CvMapping::Sum blendSum = cvMapping->sum(CvMapping::Blend);
    if (blendSum.active)
-      blendInternal = 0.2 * blendSum.value;
+      setMix(0.2 * blendSum.value);
    else
-      blendInternal = static_cast<float>(blend) / static_cast<float>(maxBlend);
+      setMix(static_cast<float>(blend) / static_cast<float>(maxBlend));
 
    return frequency;
 }
 
-float CustomTable::valueByAngle(const float& angle) const
-{
-   const float baseValue = standardTable.valueByAngle(angle);
-   const float randomValue = randomWalkTables.valueByAngle(angle);
-
-   const float value = (1.0 - blendInternal) * baseValue + randomValue * blendInternal;
-   return value;
-}
 
 Standard::Waveform::Shape CustomTable::getWaveform() const
 {
@@ -137,7 +131,7 @@ uint8_t CustomTable::getBlend() const
 
 const float& CustomTable::getMappedBlend() const
 {
-   return blendInternal;
+   return getMix();
 }
 
 void CustomTable::changeBlend(bool up)

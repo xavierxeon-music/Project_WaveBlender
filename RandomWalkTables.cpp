@@ -9,7 +9,7 @@
 const uint8_t RandomWalkTables::maxSeed = 127;
 
 RandomWalkTables::RandomWalkTables()
-   : WaveTable::Table()
+   : WaveTable::Table(4.0f * Maths::pi)
    , seed(0)
 {
    for (uint8_t tmpSeed = 0; tmpSeed <= maxSeed; tmpSeed++)
@@ -42,7 +42,6 @@ float RandomWalkTables::valueByAngle(const float& angle) const
 uint64_t RandomWalkTables::fullIndexFromAngle(float angle) const
 {
    static const uint64_t resolution = 4096;
-   static const float maxAngle = 4.0f * Maths::pi;
    static const float anglePerStep = maxAngle / static_cast<float>(resolution);
 
    while (angle < 0)

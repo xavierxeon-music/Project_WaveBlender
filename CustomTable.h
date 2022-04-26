@@ -6,11 +6,12 @@
 
 #include <Music/Note.h>
 #include <Sound/StandardTable.h>
+#include <Sound/WaveTableMorpher.h>
 
 #include "CvMapping.h"
 #include "RandomWalkTables.h"
 
-class CustomTable : public WaveTable::Table, public Remember::Container
+class CustomTable : public WaveTable::Morpher, public Remember::Container
 {
 public:
    static const uint8_t maxBlend;
@@ -23,8 +24,7 @@ public:
 
    // input / output
    CvMapping* getCvMapping();
-   float setCvAndGetFrequency(const float controlVoltages[4]);
-   float valueByAngle(const float& angle) const override;
+   float setCvAndGetFrequency(const float controlVoltages[4]);   
 
    // user interaction - waveform
    Standard::Waveform::Shape getWaveform() const;
@@ -61,7 +61,6 @@ private:
    uint8_t seedInternal;
 
    Value_ blend;
-   float blendInternal;
 
    Standard::Table standardTable;
    RandomWalkTables randomWalkTables;

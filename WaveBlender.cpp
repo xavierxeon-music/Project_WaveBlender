@@ -11,7 +11,6 @@ WaveBlender::WaveBlender()
    : Abstract::Patch("WaveBlender")
    , FlashSettings(this, 5)
    , oscilators()
-   , randomWalkTables()
    , tables(this)
 {
    load();
@@ -21,7 +20,7 @@ WaveBlender::WaveBlender()
    for (uint8_t channel = 0; channel < 4; channel++)
    {
       CustomTable& customTable = tables[channel];
-      customTable.init(&randomWalkTables);
+      customTable.init();
 
       oscilators[channel].init(&customTable, sampleRate);
       oscilators[channel].setFrequency(200.0);

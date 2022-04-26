@@ -8,8 +8,7 @@
 #include <Sound/StandardTable.h>
 
 #include "CvMapping.h"
-
-class RandomWalkTables;
+#include "RandomWalkTables.h"
 
 class CustomTable : public WaveTable::Table, public Remember::Container
 {
@@ -20,7 +19,7 @@ public:
    CustomTable();
 
 public:
-   void init(RandomWalkTables* randomWalkTables);
+   void init();
 
    // input / output
    CvMapping* getCvMapping();
@@ -64,7 +63,8 @@ private:
    Value_ blend;
    float blendInternal;
 
-   RandomWalkTables* randomWalkTables;
+   Standard::Table standardTable;
+   RandomWalkTables randomWalkTables;
 };
 
 #endif // CustomTableH

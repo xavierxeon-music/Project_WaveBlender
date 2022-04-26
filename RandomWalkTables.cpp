@@ -9,30 +9,34 @@
 const uint8_t RandomWalkTables::maxSeed = 127;
 
 RandomWalkTables::RandomWalkTables()
+   : WaveTable::Table()
+   , seed(0)
 {
-   for (uint8_t seed = 0; seed <= maxSeed; seed++)
-      create(seed);
+   for (uint8_t tmpSeed = 0; tmpSeed <= maxSeed; tmpSeed++)
+   {
+      FastRandom random(tmpSeed);
+      float value = 0.0f;
+      const float size = 0.3;
+      for (uint8_t index = 0; index < 64; index++)
+      {
+         value += (2.0f * size * random.value()) - size;
+         value = Range::clamp<float>(value, -1.0, 1.0);
+
+         tables[tmpSeed][index] = value;
+      }
+   }
 }
 
-float RandomWalkTables::valueByAngle(const uint8_t seed, const float& angle) const
+void RandomWalkTables::setSeed(const uint8_t& newSeed)
+{
+   seed = newSeed;
+}
+
+float RandomWalkTables::valueByAngle(const float& angle) const
 {
    const uint64_t fullIndex = fullIndexFromAngle(angle);
    const Index index = indexFromFullIndex(fullIndex);
    return valueFromIndex(seed, index);
-}
-
-void RandomWalkTables::create(const uint8_t seed)
-{
-   FastRandom random(seed);
-   float value = 0.0f;
-   const float size = 0.3;
-   for (uint8_t index = 0; index < 64; index++)
-   {
-      value += (2.0f * size * random.value()) - size;
-      value = Range::clamp<float>(value, -1.0, 1.0);
-
-      tables[seed][index] = value;
-   }
 }
 
 uint64_t RandomWalkTables::fullIndexFromAngle(float angle) const

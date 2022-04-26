@@ -24,7 +24,6 @@ private: // things to remember
 
 private:
    WaveTable::Oscilator oscilators[4];
-   RandomWalkTables randomWalkTables;
    CustomTableArray_ tables;
 };
 

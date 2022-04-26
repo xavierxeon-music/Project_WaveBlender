@@ -17,18 +17,19 @@ CustomTable::CustomTable()
    , seedInternal{0}
    , blend(this, 0)
    , blendInternal{0.0}
-   , randomWalkTables(nullptr)
+   , standardTable()
+   , randomWalkTables()
 {
    seedInternal = seed;
    blendInternal = static_cast<float>(blend) / static_cast<float>(maxBlend);
 }
 
-void CustomTable::init(RandomWalkTables* randomWalkTables)
+void CustomTable::init()
 {
    seedInternal = seed;
    blendInternal = static_cast<float>(blend) / static_cast<float>(maxBlend);
-
-   this->randomWalkTables = randomWalkTables;
+   standardTable.setWaveform(waveform);
+   randomWalkTables.setSeed(seedInternal);
 }
 
 CvMapping* CustomTable::getCvMapping()
@@ -49,19 +50,21 @@ float CustomTable::setCvAndGetFrequency(const float controlVoltages[4])
    else
       seedInternal = seed;
 
+   randomWalkTables.setSeed(seedInternal);
+
    const CvMapping::Sum blendSum = cvMapping->sum(CvMapping::Blend);
    if (blendSum.active)
-      blendInternal = blendSum.value;
+      blendInternal = 0.2 * blendSum.value;
    else
-      blendInternal = static_cast<float>(0.2 * blend) / static_cast<float>(maxBlend);
+      blendInternal = static_cast<float>(blend) / static_cast<float>(maxBlend);
 
    return frequency;
 }
 
 float CustomTable::valueByAngle(const float& angle) const
 {
-   const float baseValue = Standard::getTable(static_cast<Standard::Waveform::Shape>(waveform))->valueByAngle(angle);
-   const float randomValue = randomWalkTables->valueByAngle(seedInternal, angle);
+   const float baseValue = standardTable.valueByAngle(angle);
+   const float randomValue = randomWalkTables.valueByAngle(angle);
 
    const float value = (1.0 - blendInternal) * baseValue + randomValue * blendInternal;
    return value;
@@ -78,12 +81,15 @@ void CustomTable::changeWaveform(bool up)
    Variable::Enum<Standard::Waveform::Shape> var(waveform, waveformOrder, true);
 
    if (var.change(up))
+   {
       Remember::Root::setUnsynced();
+      standardTable.setWaveform(waveform);
+   }
 }
 
 std::string CustomTable::getWaveformName() const
 {
-   return Standard::getName(static_cast<Standard::Waveform::Shape>(waveform));
+   return Standard::Waveform::getName(waveform);
 }
 
 Note CustomTable::getOffsetNote()

@@ -9,7 +9,7 @@
 const uint8_t RandomWalkTables::maxSeed = 127;
 
 RandomWalkTables::RandomWalkTables()
-   : WaveTable::Table(4.0f * Maths::pi)
+   : WaveTable::StepTable(4096, 4.0f * Maths::pi)
    , seed(0)
 {
    for (uint8_t tmpSeed = 0; tmpSeed <= maxSeed; tmpSeed++)
@@ -34,33 +34,13 @@ void RandomWalkTables::setSeed(const uint8_t& newSeed)
 
 float RandomWalkTables::valueByAngle(const float& angle) const
 {
-   const uint64_t fullIndex = fullIndexFromAngle(angle);
-   const Index index = indexFromFullIndex(fullIndex);
-   return valueFromIndex(seed, index);
-}
+   const uint64_t fullIndex = stepIndexFromAngle(angle);
 
-uint64_t RandomWalkTables::fullIndexFromAngle(float angle) const
-{
-   static const uint64_t resolution = 4096;
-   static const float anglePerStep = maxAngle / static_cast<float>(resolution);
-
-   while (angle < 0)
-      angle += maxAngle;
-
-   while (angle >= maxAngle)
-      angle -= maxAngle;
-
-   const uint64_t fullIndex = static_cast<uint64_t>(angle / anglePerStep);
-   return fullIndex;
-}
-
-RandomWalkTables::Index RandomWalkTables::indexFromFullIndex(const uint64_t& fullIndex) const
-{
    Index index;
    index.minor = fullIndex % 64;
    index.major = (fullIndex - index.minor) / 64;
 
-   return index;
+   return valueFromIndex(seed, index);
 }
 
 float RandomWalkTables::valueFromIndex(const uint8_t seed, const Index& index) const

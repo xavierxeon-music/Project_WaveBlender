@@ -44,7 +44,7 @@ float CustomTable::setCvAndGetFrequency(const float controlVoltages[4])
    cvMapping->apply(controlVoltages);
 
    const float voltage = (cvMapping->sum(CvMapping::Pitch).value) + offsetVoltage;
-   const float frequency = WaveTable::Oscilator::frequencyFromCV(voltage);
+   const float frequency = Abstract::Oscilator::frequencyFromCV(voltage);
 
    const CvMapping::Sum seedSum = cvMapping->sum(CvMapping::Seed);
    if (seedSum.active)

@@ -5,7 +5,7 @@
 
 #include <Global.h>
 
-class RandomWalkTables : public WaveTable::Table
+class RandomWalkTables : public WaveTable::StepTable
 {
 public:
    static const uint8_t maxSeed;
@@ -25,8 +25,6 @@ private:
    };
 
 private:
-   uint64_t fullIndexFromAngle(float angle) const;
-   Index indexFromFullIndex(const uint64_t& fullIndex) const;
    float valueFromIndex(const uint8_t seed, const Index& index) const;
 
 private:

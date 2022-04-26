@@ -1,6 +1,6 @@
 #include "WaveBlender.h"
 
-#include <Sound/CircularTable.h>
+#include <Sound/WaveTable.h>
 #include <Tools/Convert.h>
 #include <Tools/Counter.h>
 

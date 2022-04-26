@@ -1,7 +1,7 @@
 #include "PageChannel.h"
 
 #include <Music/Note.h>
-#include <Sound/TableOscilator.h>
+#include <Sound/WaveTable.h>
 #include <Tools/Convert.h>
 
 #include "CustomTable.h"
@@ -13,7 +13,7 @@ const Range::Mapper PageChannel::amplitudeMapper(-1.0, 1.0, 50.0, 2.0);
 const Range::Mapper PageChannel::seedMapper(0, RandomWalkTables::maxSeed, 0.0, 127.0);
 const Range::Mapper PageChannel::blendMapper(0, 1.0, 50.0, 2.0);
 
-PageChannel::PageChannel(CustomTable* table, TableOscilator* oscilator, uint8_t channel)
+PageChannel::PageChannel(CustomTable* table, WaveTable::Oscilator* oscilator, uint8_t channel)
    : Abstract::Page::Base()
    , table(table)
    , oscilator(oscilator)

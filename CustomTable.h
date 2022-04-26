@@ -2,7 +2,7 @@
 #define CustomTableH
 
 #include <Remember.h>
-#include <Sound/CircularTable.h>
+#include <Sound/WaveTable.h>
 
 #include <Music/Note.h>
 #include <Sound/StandardTable.h>
@@ -11,7 +11,7 @@
 
 class RandomWalkTables;
 
-class CustomTable : public CircularTable, public Remember::Container
+class CustomTable : public WaveTable::Table, public Remember::Container
 {
 public:
    static const uint8_t maxBlend;

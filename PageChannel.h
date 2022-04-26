@@ -7,12 +7,16 @@
 #include <Tools/Range.h>
 
 class CustomTable;
-class TableOscilator;
+
+namespace WaveTable
+{
+   class Oscilator;
+}
 
 class PageChannel : public Abstract::Page::Base
 {
 public:
-   PageChannel(CustomTable* table, TableOscilator* oscilator, uint8_t channel);
+   PageChannel(CustomTable* table, WaveTable::Oscilator* oscilator, uint8_t channel);
 
 private:
    enum class WaveOperation
@@ -33,7 +37,7 @@ private:
 
 private:
    CustomTable* table;
-   TableOscilator* oscilator;
+   WaveTable::Oscilator* oscilator;
    uint8_t channel;
    WaveOperation operation;
    Indicator::Block saveIndicator;

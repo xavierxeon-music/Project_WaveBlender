@@ -1,7 +1,7 @@
 #ifndef RandomWalkTablesH
 #define RandomWalkTablesH
 
-#include <Sound/CircularTable.h>
+#include <Sound/WaveTable.h>
 
 #include <Global.h>
 

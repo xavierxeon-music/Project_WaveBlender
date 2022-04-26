@@ -5,7 +5,7 @@
 #include <Storage/FlashSettings.h>
 
 #include <Remember.h>
-#include <Sound/TableOscilator.h>
+#include <Sound/WaveTable.h>
 
 #include "CustomTable.h"
 #include "RandomWalkTables.h"
@@ -23,7 +23,7 @@ private: // things to remember
    using CustomTableArray_ = Remember::RefArray<CustomTable, 4>;
 
 private:
-   TableOscilator oscilators[4];
+   WaveTable::Oscilator oscilators[4];
    RandomWalkTables randomWalkTables;
    CustomTableArray_ tables;
 };

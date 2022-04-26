@@ -8,7 +8,7 @@
 const uint8_t CustomTable::maxBlend = 63;
 
 CustomTable::CustomTable()
-   : CircularTable(2 * 2.0f * Maths::pi)
+   : WaveTable::Table(2 * 2.0f * Maths::pi)
    , Remember::Container()
    , cvMapping(this)
    , waveform(this, Standard::Waveform::Sine)
@@ -41,11 +41,11 @@ float CustomTable::setCvAndGetFrequency(const float controlVoltages[4])
    cvMapping->apply(controlVoltages);
 
    const float voltage = (cvMapping->sum(CvMapping::Pitch).value) + offsetVoltage;
-   const float frequency = TableOscilator::frequencyFromCV(voltage);
+   const float frequency = WaveTable::Oscilator::frequencyFromCV(voltage);
 
    const CvMapping::Sum seedSum = cvMapping->sum(CvMapping::Seed);
    if (seedSum.active)
-      seedInternal = static_cast<uint8_t>(seedSum.value * RandomWalkTables::maxSeed);
+      seedInternal = static_cast<uint8_t>(0.2 * seedSum.value * RandomWalkTables::maxSeed);
    else
       seedInternal = seed;
 
@@ -53,7 +53,7 @@ float CustomTable::setCvAndGetFrequency(const float controlVoltages[4])
    if (blendSum.active)
       blendInternal = blendSum.value;
    else
-      blendInternal = static_cast<float>(blend) / static_cast<float>(maxBlend);
+      blendInternal = static_cast<float>(0.2 * blend) / static_cast<float>(maxBlend);
 
    return frequency;
 }

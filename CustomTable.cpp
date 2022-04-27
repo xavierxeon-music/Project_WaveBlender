@@ -43,7 +43,7 @@ float CustomTable::setCvAndGetFrequency(const float controlVoltages[4])
 {
    cvMapping->apply(controlVoltages);
 
-   const float voltage = (cvMapping->sum(CvMapping::Pitch).value) + offsetVoltage;
+   const float voltage = 1.0 + (cvMapping->sum(CvMapping::Pitch).value) + offsetVoltage;
    const float frequency = Abstract::Oscilator::frequencyFromCV(voltage);
 
    const CvMapping::Sum seedSum = cvMapping->sum(CvMapping::Seed);
@@ -83,7 +83,8 @@ void CustomTable::changeWaveform(bool up)
 
 std::string CustomTable::getWaveformName() const
 {
-   return Standard::Waveform::getName(waveform);
+   // cast needed for arm compiler!
+   return Standard::Waveform::getName(static_cast<Standard::Waveform::Shape>(waveform));
 }
 
 Note CustomTable::getOffsetNote()
@@ -94,7 +95,7 @@ Note CustomTable::getOffsetNote()
 void CustomTable::changeOffsetNote(bool up)
 {
    static const uint8_t minMidiValue = Note::availableNotes.at(1).midiValue;
-   static const uint8_t maxMidiValue = Note::availableNotes.at(Note::maxIndex).midiValue;
+   static const uint8_t maxMidiValue = Note::availableNotes.at(Note::maxNoteIndex).midiValue;
 
    uint8_t currentMidiValue = Note::fromVoltage(offsetVoltage).midiValue;
 

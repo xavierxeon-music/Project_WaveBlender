@@ -95,7 +95,7 @@ void PageChannel::renderFooter(OledDisplay* display)
    }
    else if (WaveOperation::NoteOffset == operation)
    {
-      write(display, 32, 55, "C2 in >", Font_6x8, textColor);
+      write(display, 32, 55, "C0 in >", Font_6x8, textColor);
 
       const Note offsetNote = table->getOffsetNote();
       write(display, 80, 55, offsetNote.name + " out", Font_6x8, textColor);

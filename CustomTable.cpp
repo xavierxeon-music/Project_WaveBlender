@@ -17,21 +17,22 @@ CustomTable::CustomTable()
    , seedInternal{0}
    , blend(this, 0)
    , standardTable()
-   , randomWalkTables()
+   , randomWalkTables(nullptr)
 {
    seedInternal = seed;
    setMix(static_cast<float>(blend) / static_cast<float>(maxBlend));
-
-   addTable(&standardTable);
-   addTable(&randomWalkTables);
 }
 
-void CustomTable::init()
+void CustomTable::init(RandomWalkTables* randomWalkTables)
 {
    seedInternal = seed;
    setMix(static_cast<float>(blend) / static_cast<float>(maxBlend));
    standardTable.setWaveform(waveform);
-   randomWalkTables.setSeed(seedInternal);
+
+   this->randomWalkTables = randomWalkTables;
+
+   addTable(&standardTable);
+   addTable(randomWalkTables);
 }
 
 CvMapping* CustomTable::getCvMapping()
@@ -52,8 +53,6 @@ float CustomTable::setCvAndGetFrequency(const float controlVoltages[4])
    else
       seedInternal = seed;
 
-   randomWalkTables.setSeed(seedInternal);
-
    const CvMapping::Sum blendSum = cvMapping->sum(CvMapping::Blend);
    if (blendSum.active)
       setMix(0.2 * blendSum.value);
@@ -63,6 +62,11 @@ float CustomTable::setCvAndGetFrequency(const float controlVoltages[4])
    return frequency;
 }
 
+float CustomTable::valueByAngle(const float& angle) const
+{
+   randomWalkTables->setSeed(seedInternal);
+   return WaveTable::Morpher::valueByAngle(angle);
+}
 
 Standard::Waveform::Shape CustomTable::getWaveform() const
 {
@@ -97,12 +101,14 @@ void CustomTable::changeOffsetNote(bool up)
    static const uint8_t minMidiValue = Note::availableNotes.at(1).midiValue;
    static const uint8_t maxMidiValue = Note::availableNotes.at(Note::maxNoteIndex).midiValue;
 
-   uint8_t currentMidiValue = Note::fromVoltage(offsetVoltage).midiValue;
+   const Note oldNote = Note::fromVoltage(offsetVoltage);
+   uint8_t currentMidiValue = oldNote.midiValue;
 
    Variable::Integer<uint8_t> var(currentMidiValue, minMidiValue, maxMidiValue, false);
    if (var.change(up))
    {
-      offsetVoltage = Note::fromMidi(currentMidiValue).voltage;
+      const Note newNote = Note::fromMidi(currentMidiValue);
+      offsetVoltage = newNote.voltage;
       Remember::Root::setUnsynced();
    }
 }

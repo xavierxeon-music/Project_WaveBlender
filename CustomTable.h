@@ -9,7 +9,8 @@
 #include <Sound/WaveTableMorpher.h>
 
 #include "CvMapping.h"
-#include "RandomWalkTables.h"
+
+class RandomWalkTables;
 
 class CustomTable : public WaveTable::Morpher, public Remember::Container
 {
@@ -20,11 +21,12 @@ public:
    CustomTable();
 
 public:
-   void init();
+   void init(RandomWalkTables* randomWalkTables);
 
    // input / output
    CvMapping* getCvMapping();
-   float setCvAndGetFrequency(const float controlVoltages[4]);   
+   float setCvAndGetFrequency(const float controlVoltages[4]);
+   float valueByAngle(const float& angle) const override;
 
    // user interaction - waveform
    Standard::Waveform::Shape getWaveform() const;
@@ -63,7 +65,7 @@ private:
    Value_ blend;
 
    Standard::Table standardTable;
-   RandomWalkTables randomWalkTables;
+   mutable RandomWalkTables* randomWalkTables;
 };
 
 #endif // CustomTableH

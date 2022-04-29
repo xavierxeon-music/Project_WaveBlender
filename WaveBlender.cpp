@@ -1,16 +1,15 @@
 #include "WaveBlender.h"
 
 #include <Sound/WaveTable.h>
-#include <Tools/Convert.h>
 #include <Tools/Counter.h>
 
 #include "PageChannel.h"
-#include "PageOverview.h"
 
 WaveBlender::WaveBlender()
    : Abstract::Patch("WaveBlender")
-   , FlashSettings(this, 5)
-   , oscilators()
+   , FlashSettings(this, 7)
+   , randomWalkTables()
+   , oscilators{}
    , tables(this)
 {
    load();
@@ -20,7 +19,7 @@ WaveBlender::WaveBlender()
    for (uint8_t channel = 0; channel < 4; channel++)
    {
       CustomTable& customTable = tables[channel];
-      customTable.init();
+      customTable.init(&randomWalkTables);
 
       oscilators[channel].init(&customTable, sampleRate);
       oscilators[channel].setFrequency(200.0);

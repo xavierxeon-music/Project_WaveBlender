@@ -23,6 +23,7 @@ private: // things to remember
    using CustomTableArray_ = Remember::RefArray<CustomTable, 4>;
 
 private:
+   RandomWalkTables randomWalkTables;
    WaveTable::Oscilator oscilators[4];
    CustomTableArray_ tables;
 };

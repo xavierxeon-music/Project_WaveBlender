@@ -6,7 +6,6 @@ CPP_SOURCES += \
    CvMapping.cpp \
    OverlayCv.cpp \
    PageChannel.cpp \
-   PageOverview.cpp \
    RandomWalkTables.cpp \
    CustomTable.cpp \
    WaveBlender.cpp

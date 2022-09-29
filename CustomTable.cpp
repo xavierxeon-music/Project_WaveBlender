@@ -75,7 +75,7 @@ Standard::Waveform::Shape CustomTable::getWaveform() const
 
 void CustomTable::changeWaveform(bool up)
 {
-   static const std::vector<Standard::Waveform::Shape> waveformOrder = {Standard::Waveform::Sine, Standard::Waveform::Saw, Standard::Waveform::Square, Standard::Waveform::SlopeUp, Standard::Waveform::SlopeDown};
+   static const std::vector<Standard::Waveform::Shape> waveformOrder = {Standard::Waveform::Sine, Standard::Waveform::Triange, Standard::Waveform::Square, Standard::Waveform::Saw, Standard::Waveform::InvSaw};
    Variable::Enum<Standard::Waveform::Shape> var(waveform, waveformOrder, true);
 
    if (var.change(up))

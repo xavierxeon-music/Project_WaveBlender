@@ -2,7 +2,7 @@
 
 #include <Music/Note.h>
 #include <Sound/WaveTable.h>
-#include <Tools/Convert.h>
+#include <Tools/Text.h>
 
 #include "CustomTable.h"
 #include "OverlayCv.h"
@@ -86,7 +86,7 @@ void PageChannel::renderFooter(OledDisplay* display)
    if (Mode::Neutral == mode)
    {
       const float frequency = oscilator->getFrequency();
-      const std::string freqText = Convert::text(frequency, 0) + "Hz";
+      const std::string freqText = Text::convert(frequency, 0) + "Hz";
       const uint8_t freqY = 115 - (freqText.size() * 8);
       write(display, freqY, 55, freqText, Font_6x8, textColor);
 
@@ -109,14 +109,14 @@ void PageChannel::renderFooter(OledDisplay* display)
    {
       write(display, 44, 55, "blend", Font_6x8, textColor);
 
-      const std::string blendText = Convert::text(table->getBlend());
+      const std::string blendText = Text::convert(table->getBlend());
       write(display, 80, 55, blendText, Font_6x8, textColor);
    }
    else if (WaveOperation::Seed == operation)
    {
       write(display, 50, 55, "seed", Font_6x8, textColor);
 
-      const std::string seedText = Convert::text(table->getSeed());
+      const std::string seedText = Text::convert(table->getSeed());
       write(display, 80, 55, seedText, Font_6x8, textColor);
    }
 

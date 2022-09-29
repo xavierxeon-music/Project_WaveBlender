@@ -3,7 +3,7 @@
 
 #include <Abstract/AbstractPageOverlay.h>
 
-#include <Tools/SquareSignal.h>
+#include <Utility/SquareSignal.h>
 
 #include "CvMapping.h"
 

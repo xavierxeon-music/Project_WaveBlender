@@ -5,7 +5,7 @@
 #include <Storage/FlashSettings.h>
 
 #include <Remember.h>
-#include <Sound/WaveTable.h>
+#include <Sound/WaveTableOscilator.h>
 
 #include "CustomTable.h"
 #include "RandomWalkTables.h"

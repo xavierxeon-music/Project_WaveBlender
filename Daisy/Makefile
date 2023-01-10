@@ -10,5 +10,5 @@ CPP_SOURCES += \
    CustomTable.cpp \
    WaveBlender.cpp
 
-BASE_DIR = $(CURDIR)/../../Base
+BASE_DIR = $(CURDIR)/../../../Base
 include $(BASE_DIR)/MakefilePatch

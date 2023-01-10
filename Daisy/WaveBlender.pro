@@ -1,7 +1,7 @@
 TARGET = WaveBlender
 TEMPLATE = app
 
-include(../../Base/PatchImposterApp.pri)
+include(../../../Base/PatchImposterApp.pri)
 
 HEADERS += \
     CvMapping.h \
